@@ -58,7 +58,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout 
-      - restore_cache
+      - restore_cache:
           keys: [backend-build]
       - run:
           name: Back-end build
@@ -129,6 +129,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+            exit
       - slack/notify:
           event: fail
           template: basic_fail_1
