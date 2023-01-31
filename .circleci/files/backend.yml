@@ -26,9 +26,10 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      SecurityGroups: !Ref InstanceSecurityGroup      
+      SecurityGroups:
+        - Ref: InstanceSecurityGroup  
       KeyName: Udapeople
-      ImageId: ami-00874d747dde814fa 
+      ImageId: ami-0a7eae50da6b985bb 
       Tags:
         - Key: Name
           Value: !Sub backend-${ID}
