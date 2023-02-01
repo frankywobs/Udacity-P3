@@ -193,15 +193,15 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            sudo apt install -y tar gzip curl
-            curl "https://awscli.amazonaws.com/aws-cli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip -qq awscliv2.zip
-            sudo ./aws/install
-      - restore_cache:
-          keys: [backend-build]
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       sudo apt install -y tar gzip curl
+      #       curl "https://awscli.amazonaws.com/aws-cli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      #       unzip -qq awscliv2.zip
+      #       sudo ./aws/install
+      # - restore_cache:
+      #     keys: [backend-build]
       - run: 
           name: Run migrations    
           command: |
@@ -217,6 +217,8 @@ jobs:
               fi
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
     
 
   deploy-frontend:
