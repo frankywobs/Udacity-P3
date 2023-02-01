@@ -198,7 +198,6 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
-            aws --version
       - restore_cache:
          keys: [backend-build]
       - run: 
@@ -207,11 +206,11 @@ jobs:
              cd backend
              npm install
              npm audit fix --force
-             npm run migrations > migrations.txt
+             npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to kvdb
           command: |   
-              if grep -q "has been executed successfully." ~/project/backend/migrations.txt
+              if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
               then
                 curl --insecure https://kvdb.io/Nc6USUV2dsWuDLAEg9zhfU/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
               fi
