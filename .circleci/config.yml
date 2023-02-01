@@ -3,8 +3,7 @@ version: 2.1
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    parameters:
-      # Add parameter here 
+    parameters: 
       workflow_id: 
          type: string  
     steps:
@@ -191,15 +190,15 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       sudo apt-get update && sudo apt-get install -y -q curl && sudo apt-get install -y -q zip
-      #       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip"
-      #       unzip awscliv2.zip
-      #       sudo ./aws/install 
-      # - restore_cache:
-      #    keys: [backend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get update && sudo apt-get install -y -q curl && sudo apt-get install -y -q zip
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install 
+      - restore_cache:
+         keys: [backend-build]
       - run: 
           name: Run migrations    
           command: |
@@ -264,19 +263,22 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "5d:55:20:4b:e6:6a:ae:7d:dc:3d:08:a5:11:85:0c:9b"
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       # your code here
-      # - run:
-      #     name: Deploy backend
-      #     command: |
-      #       apk add --update --no-cache tar gzip nodejs npm aws-cli ansible
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible curl rsync openssh nodejs npm
+            ansible --version
+            pip install awscli
+            aws --version
+      - run:
+          name: Deploy backend
+          command: |
+            apk add --update --no-cache tar gzip nodejs npm aws-cli ansible
       - attach_workspace: 
           at: ~/
-      - install_nodejs
-      - install_awscli
-      - install_ansible
+      # - install_nodejs
+      # - install_awscli
+      # - install_ansible
       - restore_cache:
           keys: [backend-build]    
       - run:
