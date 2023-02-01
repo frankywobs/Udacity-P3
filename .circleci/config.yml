@@ -227,6 +227,8 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip nodejs npm aws-cli
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Get backend url
           command: |
@@ -239,8 +241,6 @@ jobs:
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
-      - restore_cache:
-          keys: [frontend-build]
       - run:
           name: Deploy frontend objects
           command: |
@@ -265,13 +265,6 @@ jobs:
             - "5d:55:20:4b:e6:6a:ae:7d:dc:3d:08:a5:11:85:0c:9b"
       - run:
           name: Install dependencies
-          command: |
-            apk add --update ansible curl rsync openssh nodejs npm
-            ansible --version
-            pip install awscli
-            aws --version
-      - run:
-          name: Deploy backend
           command: |
             apk add --update --no-cache tar gzip nodejs npm aws-cli ansible
       - attach_workspace: 
