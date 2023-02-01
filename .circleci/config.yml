@@ -191,21 +191,20 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            sudo apt-get update && sudo apt-get install -y -q curl && sudo apt-get install -y -q zip
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-      - restore_cache:
-         keys: [backend-build]
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       sudo apt-get update && sudo apt-get install -y -q curl && sudo apt-get install -y -q zip
+      #       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip"
+      #       unzip awscliv2.zip
+      #       sudo ./aws/install 
+      # - restore_cache:
+      #    keys: [backend-build]
       - run: 
           name: Run migrations    
           command: |
              cd backend
              npm install
-             npm audit fix --force
              npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to kvdb
