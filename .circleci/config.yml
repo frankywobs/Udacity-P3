@@ -191,15 +191,16 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       sudo apt install -y tar gzip curl
-      #       curl "https://awscli.amazonaws.com/aws-cli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      #       unzip -qq awscliv2.zip
-      #       sudo ./aws/install
-      # - restore_cache:
-      #     keys: [backend-build]
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get update && sudo apt-get install -y -q curl && sudo apt-get install -y -q zip
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" --output "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            aws --version
+      - restore_cache:
+         keys: [backend-build]
       - run: 
           name: Run migrations    
           command: |
