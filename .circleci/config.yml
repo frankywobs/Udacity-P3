@@ -300,9 +300,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update --no-cache curl aws-cli nodejs npm
-      # -  attach_workspace:
-      #      at: ~/
-      - run:
+      - runs:
           name: Backend smoke test
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
