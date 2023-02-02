@@ -31,14 +31,13 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=1
-            SUCCESS=$(curl --insecure "https://kvdb.io/Nc6USUV2dsWuDLAEg9zhfU/migration_${CIRCLE_WORKFLOW_ID}
+            SUCCESS=$(curl --insecure  https://kvdb.io/Nc6USUV2dsWuDLAEg9zhfU/migration_<< parameters.workflow_id >>)
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
               npm install
               npm run build
-              npm run migrations:revert
+              npm run migration:revert
             f1
           
 jobs:
@@ -267,10 +266,10 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update --no-cache tar gzip nodejs npm aws-cli ansible
-      - attach_workspace: 
-          at: ~/
       - restore_cache:
-          keys: [backend-build]    
+          keys: [backend-build]       
+      - attach_workspace: 
+          at: ~/   
       - run:
           name: Deploy backend
           command: |
@@ -314,7 +313,7 @@ jobs:
               echo "${API_URL}"
               if curl -s "${API_URL}/api/status" | grep "ok"
               then
-                 exit 1
+                 exit 0
               else
                  exit 1
               fi
@@ -326,7 +325,7 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-               exit 1
+               exit 0
             else
                exit 1
             fi
