@@ -192,6 +192,7 @@ jobs:
       - run:
           name: Configure server
           command: |
+            cd backend && echo TYPEORM_ENTITIES>>$TYPEORM_ENTITIES >> ".env"
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
@@ -317,7 +318,7 @@ jobs:
               --output text)
               export API_URL="http://${BACKEND_IP}:3030"
               echo "${API_URL}"
-              if curl "${API_URL}/api/status" | grep "ok"
+              if curl -s "${API_URL}/api/status" | grep "ok"
               then
                   return 0
               else
