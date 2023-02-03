@@ -288,7 +288,6 @@ jobs:
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
-            #mkdir -p ~project/.circleci/ansible/roles/deploy/files/
             mkdir .circleci/ansible/roles/deploy/files/
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
@@ -332,7 +331,7 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-               exit 1
+               exit 0
             else
                exit 1
             fi
