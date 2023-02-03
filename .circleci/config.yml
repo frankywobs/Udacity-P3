@@ -41,6 +41,7 @@ commands:
             fi  
           
 jobs:
+
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -57,6 +58,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -73,6 +75,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -86,6 +89,7 @@ jobs:
               cd frontend
               npm install
               npm run test
+
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -98,7 +102,8 @@ jobs:
           command: |
               cd backend
               npm install
-              npm run test          
+              npm run test    
+
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -114,6 +119,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -129,6 +135,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
+
   deploy-infrastructure:
     docker:
         - image: amazon/aws-cli
@@ -166,8 +173,8 @@ jobs:
             - project/.circleci/ansible/inventory.txt     
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
   configure-infrastructure:
-  
     docker:
       # Docker image here that supports Ansible
        - image: python:3.7-alpine3.16
@@ -188,7 +195,8 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}         
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
+
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
@@ -219,7 +227,8 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
       - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}    
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
+
   deploy-frontend:
     docker:
       - image: python:3.7-alpine3.16
@@ -253,7 +262,8 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
       - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}                                
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.16
@@ -288,8 +298,7 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
       - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}                  
-      # Here's where you will add some code to rollback on failure  
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}                   
 
   smoke-test:
     docker:
@@ -327,8 +336,8 @@ jobs:
             else
                exit 1
             fi
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}   
       
@@ -383,19 +392,19 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend] 
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      #     filters:
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend] 
+      # - deploy-infrastructure:
+      #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      # #     filters:
       #       branches:
       #         only: [test-feature-branch]
       - configure-infrastructure:
