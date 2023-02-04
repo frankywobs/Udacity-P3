@@ -320,9 +320,9 @@ jobs:
               echo "${API_URL}"
               if curl -s "${API_URL}/api/status" | grep "ok"
               then
-                  return 0
+                  exit 0
               else
-                  return 2
+                  exit 2
               fi
             
       - run:
