@@ -319,9 +319,9 @@ jobs:
               echo "${API_URL}"
               if curl -s "${API_URL}/api/status" | grep "ok"
               then
-                  return 0
-              else
                   return 1
+              else
+                  return 2
               fi
             
       - run:
@@ -331,7 +331,7 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-               exit 0
+               exit 2
             else
                exit 1
             fi
