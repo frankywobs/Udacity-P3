@@ -375,7 +375,7 @@ jobs:
             command: |
               # Fetch the Old workflow ID
 
-              export OldWorkflowID=<<pipeline.parsmeters.workflow_id>>
+              export OldWorkflowID=<<pipeline.parameters.workflow_id>>
               export STACKS=($(aws cloudformation list-stacks 
               --query "StackSummaries[*].StackName" \
               --stack-status-filter CREATE_COMPLETE --no-paginate --output text))  
